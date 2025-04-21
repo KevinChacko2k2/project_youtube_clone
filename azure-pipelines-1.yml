@@ -42,7 +42,7 @@ steps:
     Dockerfile: '**/Dockerfile'
     tags: |
       latest
-  displayName: 'Build & Push Docker Image to ACR'
+  displayName: 'Build & Push Docker Image to Docker.io'
 
 # ✅ Deploy to App Service
 - task: AzureWebApp@1
