@@ -37,7 +37,7 @@ steps:
 - task: Docker@2
   inputs:
     containerRegistry: 'ytcloneregistry'
-    repository: '$(imageName)'
+    repository: 'kevinchacko1/ytclone-test'
     command: 'buildAndPush'
     Dockerfile: '**/Dockerfile'
     tags: |
