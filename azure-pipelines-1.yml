@@ -18,25 +18,9 @@ steps:
     npm run build
   displayName: 'Install dependencies & build'
 
-# ✅ Publish the build artifact
-- task: PublishBuildArtifacts@1
-  inputs:
-    PathtoPublish: 'build'  # Ensure this path is correct
-    ArtifactName: 'node-backend'
-    publishLocation: 'Container'
-
-# ✅ Download the artifact before deployment
-- task: DownloadBuildArtifacts@0
-  inputs:
-    buildType: 'current'
-    artifactName: 'node-backend'
-    downloadType: 'single'
-    downloadPath: '$(Pipeline.Workspace)'
-
-# ✅ Build Docker image and push to ACR
 - task: Docker@2
   inputs:
-    containerRegistry: 'ytcloneregistry'
+    containerRegistry: 'ytcloneregistry'  # This must be a DockerHub or ACR service connection
     repository: 'kevinchacko1/ytclone-test'
     command: 'buildAndPush'
     Dockerfile: '**/Dockerfile'
@@ -44,16 +28,9 @@ steps:
       latest
   displayName: 'Build & Push Docker Image to Docker.io'
 
-# ✅ Deploy to App Service
-- task: AzureWebApp@1
+# ✅ Deploy Docker container to Azure Web App for Containers
+- task: AzureWebAppContainer@1
   inputs:
     azureSubscription: 'MyAzureConnection'
     appName: 'youtube-test'
-    package: '$(Pipeline.Workspace)/node-backend'  # Ensure this is correct
-    runtimeStack: 'NODE|20-lts'
-    
-- script: |
-    echo "Checking build directory contents:"
-    ls -la $(Build.ArtifactStagingDirectory)
-  displayName: 'Check build directory contents'
-
+    containers: 'kevinchacko1/ytclone-test:latest'
