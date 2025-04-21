@@ -29,6 +29,8 @@ steps:
 - task: DownloadBuildArtifacts@0
   inputs:
     buildType: 'current'
+    artifactName: 'node-backend'
+    downloadType: 'single'
     downloadPath: '$(Pipeline.Workspace)'
 
 # ✅ Build Docker image and push to ACR
