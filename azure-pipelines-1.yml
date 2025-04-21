@@ -25,7 +25,7 @@ steps:
   displayName: 'Deploy to Azure App Service'
   inputs:
     azureSubscription: 'MyAzureConnection'
-    appName: 'youtube'
+    appName: 'youtube-test'
     package: '$(Build.ArtifactStagingDirectory)/node-backend'
     appType: 'webAppLinux'           # required for Linux Web Apps
     runtimeStack: 'NODE|20-lts'
