@@ -2,7 +2,7 @@ trigger:
 - main
 
 pool:
-  name: Kevin_pool
+  name: check_pool
 
 steps:
 - task: NodeTool@0
