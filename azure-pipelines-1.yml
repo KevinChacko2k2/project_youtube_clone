@@ -51,3 +51,9 @@ steps:
     appName: 'youtube-test'
     package: '$(Pipeline.Workspace)/node-backend'  # Ensure this is correct
     runtimeStack: 'NODE|20-lts'
+    
+- script: |
+    echo "Checking build directory contents:"
+    ls -la $(Build.ArtifactStagingDirectory)
+  displayName: 'Check build directory contents'
+
