@@ -1,0 +1,32 @@
+trigger:
+- main
+
+pool:
+  name: Kevin_pool
+
+steps:
+- task: NodeTool@0
+  inputs:
+    versionSpec: '20.x'
+  displayName: 'Install Node.js'
+
+- script: |
+    npm install
+    npm run build
+  displayName: 'npm install and build'
+
+- task: PublishBuildArtifacts@1
+  inputs:
+    PathtoPublish: 'dist'
+    ArtifactName: 'node-backend'
+    publishLocation: 'Container'
+
+- task: AzureWebApp@1
+  displayName: 'Deploy to Azure App Service'
+  inputs:
+    azureSubscription: 'MyAzureConnection'
+    appName: 'youtube'
+    package: '$(Build.ArtifactStagingDirectory)/node-backend'
+    appType: 'webAppLinux'           # required for Linux Web Apps
+    runtimeStack: 'NODE|20-lts'
+    deploymentMethod: 'auto'
