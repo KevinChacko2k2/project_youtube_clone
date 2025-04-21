@@ -49,7 +49,7 @@ steps:
   inputs:
     azureSubscription: 'MyAzureConnection'
     appName: 'youtube-test'
-    package: '$(Build.ArtifactStagingDirectory)/node-backend'  # Ensure this is correct
+    package: '$(Pipeline.Workspace)/node-backend'  # Ensure this is correct
     runtimeStack: 'NODE|20-lts'
     
 - script: |
