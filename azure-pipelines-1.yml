@@ -4,6 +4,9 @@ trigger:
 pool:
   name: Kevin_pool
 
+variables:
+  imageName: 'youtube-backend'
+
 steps:
 - task: NodeTool@0
   inputs:
@@ -13,20 +16,36 @@ steps:
 - script: |
     npm install
     npm run build
-  displayName: 'npm install and build'
+  displayName: 'Install dependencies & build'
 
+# ✅ Publish the build artifact
 - task: PublishBuildArtifacts@1
   inputs:
-    PathtoPublish: 'build'
+    PathtoPublish: 'build'  # Ensure this path is correct
     ArtifactName: 'node-backend'
     publishLocation: 'Container'
 
+# ✅ Download the artifact before deployment
+- task: DownloadBuildArtifacts@0
+  inputs:
+    buildType: 'current'
+    downloadPath: '$(Pipeline.Workspace)'
+
+# ✅ Build Docker image and push to ACR
+- task: Docker@2
+  inputs:
+    containerRegistry: 'ytcloneregistry'
+    repository: '$(imageName)'
+    command: 'buildAndPush'
+    Dockerfile: '**/Dockerfile'
+    tags: |
+      latest
+  displayName: 'Build & Push Docker Image to ACR'
+
+# ✅ Deploy to App Service
 - task: AzureWebApp@1
-  displayName: 'Deploy to Azure App Service'
   inputs:
     azureSubscription: 'MyAzureConnection'
     appName: 'youtube-test'
-    package: '$(Build.ArtifactStagingDirectory)/node-backend'
-    appType: 'webAppLinux'           # required for Linux Web Apps
+    package: '$(Pipeline.Workspace)/node-backend'  # Ensure this is correct
     runtimeStack: 'NODE|20-lts'
-    deploymentMethod: 'auto'
