@@ -18,14 +18,14 @@ steps:
 
 - task: PublishBuildArtifacts@1
   inputs:
-    PathtoPublish: '$(Build.SourcesDirectory)/build'
+    PathtoPublish: '/home/kevin/agent/_work/2/s/build'
     ArtifactName: 'drop'
     publishLocation: 'Container'
 
 - task: DownloadBuildArtifacts@0
   inputs:
     artifactName: 'drop'
-    downloadPath: '$(System.DefaultWorkingDirectory)'
+    downloadPath: '$/home/kevin/agent/_work/2/s'
 
 - task: AzureWebApp@1
   displayName: 'Deploy to Azure App Service'
@@ -33,7 +33,7 @@ steps:
     azureSubscription: 'MyAzureConnection'
     resourceGroupName: 'primeV2'
     appName: 'youtube-test-clone'
-    package: '$(System.DefaultWorkingDirectory)/drop'
+    package: '/home/kevin/agent/_work/2/s/drop'
     appType: 'webAppLinux'
     runtimeStack: 'NODE|20-lts'
     deploymentMethod: 'auto'
