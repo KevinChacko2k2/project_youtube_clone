@@ -13,8 +13,8 @@ stages:
     steps:
     
       - script: |
-          npm install
-          npm run build
+          /usr/bin/npm install
+          /usr/bin/npm run build
           zip -r $(Build.ArtifactStagingDirectory)/app.zip .
       - task: PublishBuildArtifacts@1
         inputs:
