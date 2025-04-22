@@ -11,13 +11,7 @@ stages:
   jobs:
   - job: 'CI'
     steps:
-      - task: NodeTool@0
-        displayName: 'Install-node.js'
-        inputs:
-          versionSource: 'spec'
-          versionSpec: '20.x'
-          checkLatest: true
-
+    
       - script: |
           npm install
           npm run build
