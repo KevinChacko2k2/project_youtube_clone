@@ -10,6 +10,11 @@ steps:
     versionSpec: '20.x'
   displayName: 'Install Node.js'
 
+- script: 
+    sudo apt-get update
+    sudo apt-get install -y zip
+  displayName: 'Install zip utility'
+  
 - script: |
     npm install
     npm run build
