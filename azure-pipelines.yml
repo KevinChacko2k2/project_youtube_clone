@@ -13,11 +13,13 @@ steps:
 - script: |
     npm install
     npm run build
+    cd /home/kevin/agent/_work/2/s/build
+    zip -r ../app.zip .
   displayName: 'npm install and build'
 
 - task: PublishBuildArtifacts@1
   inputs:
-    PathtoPublish: '$(Build.SourcesDirectory)/build'
+    PathtoPublish: '$(Build.ArtifactStagingDirectory)/app.zip'
     ArtifactName: 'drop'
     publishLocation: 'Container'
 
@@ -29,8 +31,9 @@ steps:
   displayName: 'Deploy to Azure App Service'
   inputs:
     azureSubscription: 'MyAzureConnection'
+    resourceGroupName: 'primeV2'
     appName: 'youtube-test-clone'
-    package: '$(System.DefaultWorkingDirectory)/drop'
+    package: '$(System.DefaultWorkingDirectory)/drop/app.zip'
     appType: 'webAppLinux'           # required for Linux Web Apps
     runtimeStack: 'NODE|20-lts'
     deploymentMethod: 'auto'
