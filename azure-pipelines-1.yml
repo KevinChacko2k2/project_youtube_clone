@@ -19,6 +19,10 @@ stages:
           checkLatest: true
 
       - script: |
+          echo "node version $(node -v)"   
+          echo "npm version $(npm -v)"   
+
+      - script: |
           npm install
           npm run build
           zip -r $(Build.ArtifactStagingDirectory)/app.zip .
