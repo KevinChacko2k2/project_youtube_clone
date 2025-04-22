@@ -11,15 +11,31 @@ stages:
   jobs:
   - job: 'CI'
     steps:
-    - task: NodeTool@0
-      displayName: 'Install-node.js'
-      inputs:
-        versionSource: 'spec'
-        versionSpec: '22.x'
-        checkLatest: true
+      - task: NodeTool@0
+        displayName: 'Install-node.js'
+        inputs:
+          versionSource: 'spec'
+          versionSpec: '22.x'
+          checkLatest: true
+
+      - script: |
+          npm install
+          npm run build
+          zip -r $(Build.ArtifactStagingDirectory)/app.zip .
+      - task: PublishBuildArtifacts@1
+        inputs:
+          PathtoPublish: '$(Build.ArtifactStagingDirectory)/app.zip'
+          ArtifactName: 'drop'
+          publishLocation: 'Container'
 
   - job: 'CD'
     steps:
+      - task: DownloadBuildArtifacts@1
+        inputs:
+          buildType: 'current'
+          downloadType: 'single'
+          artifactName: 'drop'
+          downloadPath: '$(System.DefaultWorkingDirectory)'
       - task: AzureWebApp@1
         displayName: 'Deploy to Azure'
         inputs:
