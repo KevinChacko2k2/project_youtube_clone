@@ -17,16 +17,20 @@ steps:
 
 - task: PublishBuildArtifacts@1
   inputs:
-    PathtoPublish: 'build'
-    ArtifactName: 'node-backend'
+    PathtoPublish: '$(Build.SourcesDirectory)/build'
+    ArtifactName: 'drop'
     publishLocation: 'Container'
 
+- task: DownloadBuildArtifacts@0
+  inputs:
+    artifactName: 'drop'
+    downloadPath: '$(System.DefaultWorkingDirectory)'
 - task: AzureWebApp@1
   displayName: 'Deploy to Azure App Service'
   inputs:
     azureSubscription: 'MyAzureConnection'
     appName: 'youtube-test-clone'
-    package: '$(Build.ArtifactStagingDirectory)/node-backend'
+    package: '$(System.DefaultWorkingDirectory)/drop'
     appType: 'webAppLinux'           # required for Linux Web Apps
     runtimeStack: 'NODE|20-lts'
     deploymentMethod: 'auto'
