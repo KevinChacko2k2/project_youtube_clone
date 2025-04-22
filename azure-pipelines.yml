@@ -2,7 +2,7 @@ trigger:
 - main
 
 pool:
-  name: check_pool
+  name: Kevin_pool
 
 steps:
 - task: NodeTool@0
@@ -25,7 +25,7 @@ steps:
   displayName: 'Deploy to Azure App Service'
   inputs:
     azureSubscription: 'MyAzureConnection'
-    appName: 'youtube'
+    appName: 'youtube-test-clone'
     package: '$(Build.ArtifactStagingDirectory)/node-backend'
     appType: 'webAppLinux'           # required for Linux Web Apps
     runtimeStack: 'NODE|20-lts'
