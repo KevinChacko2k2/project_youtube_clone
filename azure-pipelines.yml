@@ -10,21 +10,14 @@ steps:
     versionSpec: '20.x'
   displayName: 'Install Node.js'
 
-- script: 
-    sudo apt-get update
-    sudo apt-get install -y zip
-  displayName: 'Install zip utility'
-  
 - script: |
     npm install
     npm run build
-    cd build
-    zip -r ../app.zip .
-  displayName: 'npm install, build and zip'
+  displayName: 'npm install and build'
 
 - task: PublishBuildArtifacts@1
   inputs:
-    PathtoPublish: '$(Build.SourcesDirectory)/app.zip'
+    PathtoPublish: '$(Build.SourcesDirectory)/build'
     ArtifactName: 'drop'
     publishLocation: 'Container'
 
@@ -39,7 +32,7 @@ steps:
     azureSubscription: 'MyAzureConnection'
     resourceGroupName: 'primeV2'
     appName: 'youtube-test-clone'
-    package: '$(System.DefaultWorkingDirectory)/drop/app.zip'
+    package: '$(System.DefaultWorkingDirectory)/drop'
     appType: 'webAppLinux'
     runtimeStack: 'NODE|20-lts'
     deploymentMethod: 'auto'
