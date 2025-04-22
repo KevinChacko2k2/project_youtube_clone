@@ -15,12 +15,8 @@ stages:
         displayName: 'Install-node.js'
         inputs:
           versionSource: 'spec'
-          versionSpec: '22.x'
+          versionSpec: '20.x'
           checkLatest: true
-
-      - script: |
-          echo "node version $(node -v)"   
-          echo "npm version $(npm -v)"   
 
       - script: |
           npm install
