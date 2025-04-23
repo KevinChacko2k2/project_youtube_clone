@@ -19,11 +19,8 @@ stages:
             npm install
             npm run build
             npm test
-        - task: Docker@2
-          displayName: 'Docker build'
-          inputs:
-              containerRegistry: 'DockerConnection'
-              repository: 'kevinchacko1/ytclone-test'
-              command: 'buildAndPush'
-              Dockerfile: '**/Dockerfile'
+
+        - script: |
+            docker build -t ytclone .
+            docker run --name clone -d -p 3000:3000 ytclone:latest
               
