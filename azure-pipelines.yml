@@ -19,8 +19,11 @@ stages:
             npm install
             npm run build
             npm test
-        - task: DockerInstaller@0
-          displayName: 'Docker Installtion'
+        - task: Docker@2
+          displayName: 'Docker build'
           inputs:
-            dockerVersion: '17.09.0-ce'
-
+              containerRegistry: 'DockerConnection'
+              repository: 'kevinchacko1/ytclone-test'
+              command: 'buildAndPush'
+              Dockerfile: '**/Dockerfile'
+              
