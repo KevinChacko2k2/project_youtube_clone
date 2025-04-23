@@ -3,37 +3,24 @@ trigger:
 
 pool:
   name: Kevin_pool
+stages: 
+  - stage: 'build'
+    jobs:
+      - job: 'Installation'
 
-steps:
-- task: NodeTool@0
-  inputs:
-    versionSpec: '20.x'
-  displayName: 'Install Node.js'
+        steps:
+        - task: NodeTool@0 
+          inputs:
+            versionSource: spec
+            versionSpec: '22.14.0'
+          displayName: 'Install Node.js'
 
-- script: |
-    cd /home/kevin/agent/_work/2/s
-    npm install
-    npm run build
-  displayName: 'npm install and build'
+        - script: |
+            npm install
+            npm run build
+            npm test
+        - task: DockerInstaller@0
+          displayName: 'Docker Installtion'
+          inputs:
+            dockerVersion: '17.09.0-ce'
 
-- task: PublishBuildArtifacts@1
-  inputs:
-    PathtoPublish: '/home/kevin/agent/_work/2/s/build'
-    ArtifactName: 'drop'
-    publishLocation: 'Container'
-
-- task: DownloadBuildArtifacts@0
-  inputs:
-    artifactName: 'drop'
-    downloadPath: '$/home/kevin/agent/_work/2/s'
-
-- task: AzureWebApp@1
-  displayName: 'Deploy to Azure App Service'
-  inputs:
-    azureSubscription: 'MyAzureConnection'
-    resourceGroupName: 'primeV2'
-    appName: 'youtube-test-clone'
-    package: '/home/kevin/agent/_work/2/s/drop'
-    appType: 'webAppLinux'
-    runtimeStack: 'NODE|20-lts'
-    deploymentMethod: 'auto'
