@@ -28,6 +28,8 @@ steps:
 
 - script: unzip -l $(Build.ArtifactStagingDirectory)/build.zip
   displayName: 'List ZIP Contents'
+
+- script: unzip $(Build.ArtifactStagingDirectory)/build.zip
 - task: AzureWebApp@1
   inputs:
     azureSubscription: 'MyAzureConnection'
