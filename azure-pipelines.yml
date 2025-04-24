@@ -20,6 +20,12 @@ steps:
     sudo apt update
     sudo apt install zip -y
 
+- task: CopyFiles@2
+  inputs:
+    SourceFolder: '$(System.DefaultWorkingDirectory)/build'
+    Contents: '**/*'
+    TargetFolder: '$(Build.ArtifactStagingDirectory)'
+  displayName: 'Copy Build Output to Artifact Staging Directory'
 - task: PublishBuildArtifacts@1
   inputs:
     PathtoPublish: '$(Build.ArtifactStagingDirectory)'
