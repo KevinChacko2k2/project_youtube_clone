@@ -17,6 +17,8 @@ steps:
     npm -v
     npm install
     npm run build
+    sudo apt update
+    sudo apt install zip -y
 - task: ArchiveFiles@2
   inputs:
     rootFolderOrFile: '$(System.DefaultWorkingDirectory)/build'
