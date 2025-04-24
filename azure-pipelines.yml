@@ -19,19 +19,32 @@ steps:
     npm run build
     sudo apt update
     sudo apt install zip -y
-- task: ArchiveFiles@2
+
+- task: PublishBuildArtifacts@1
   inputs:
-    rootFolderOrFile: '$(System.DefaultWorkingDirectory)/build'
-    includeRootFolder: false
-    archiveType: 'zip'
-    archiveFile: '$(Build.ArtifactStagingDirectory)/build.zip'
-    replaceExistingArchive: true
-  displayName: 'Archive Build Output'
+    PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+    ArtifactName: 'website'
+    publishLocation: 'Container'
+
+- task: DownloadBuildArtifacts@1
+  inputs:
+    buildType: 'current'
+    downloadType: 'single'
+    artifactName: 'website'
+    downloadPath: '$(System.ArtifactsDirectory)'
+
+#- task: ArchiveFiles@2
+#  inputs:
+#    rootFolderOrFile: '$(System.DefaultWorkingDirectory)/build'
+#    archiveType: 'zip'
+#    archiveFile: '$(Build.ArtifactStagingDirectory)/build.zip'
+#    replaceExistingArchive: true
+#  displayName: 'Archive Build Output'
 
 - task: AzureWebApp@1
   inputs:
     azureSubscription: 'MyAzureConnection'
     appType: 'webAppLinux'
     appName: 'Youtube-test-clone'
-    package: '$(Build.ArtifactStagingDirectory)/build.zip'
+    package: '$(System.ArtifactsDirectory)/build'
   displayName: 'Deploy to Azure Web App'
