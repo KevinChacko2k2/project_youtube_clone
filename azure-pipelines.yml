@@ -10,10 +10,26 @@ pool:
   name: Kevin_pool
 
 steps:
-- script: echo Hello, world!
-  displayName: 'Run a one-line script'
-
 - script: |
-    echo Add other tasks to build, test, and deploy your project.
-    echo See https://aka.ms/yaml
-  displayName: 'Run a multi-line script'
+    curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash -
+    sudo apt install nodejs -y
+    node -v
+    npm -v
+    npm install
+    npm run build
+- task: ArchiveFiles@2
+  inputs:
+    rootFolderOrFile: '$(System.DefaultWorkingDirectory)/build'
+    includeRootFolder: false
+    archiveType: 'zip'
+    archiveFile: '$(Build.ArtifactStagingDirectory)/build.zip'
+    replaceExistingArchive: true
+  displayName: 'Archive Build Output'
+
+- task: AzureWebApp@1
+  inputs:
+    azureSubscription: 'MyAzureConnection'
+    appType: 'webAppLinux'
+    appName: 'Youtube-test-clone'
+    package: '$(Build.ArtifactStagingDirectory)/build.zip'
+  displayName: 'Deploy to Azure Web App'
