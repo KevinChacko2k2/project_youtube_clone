@@ -26,6 +26,8 @@ steps:
     replaceExistingArchive: true
   displayName: 'Archive Build Output'
 
+- script: unzip -l $(Build.ArtifactStagingDirectory)/build.zip
+  displayName: 'List ZIP Contents'
 - task: AzureWebApp@1
   inputs:
     azureSubscription: 'MyAzureConnection'
