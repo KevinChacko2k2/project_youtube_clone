@@ -33,5 +33,5 @@ steps:
     azureSubscription: 'MyAzureConnection'
     appType: 'webAppLinux'
     appName: 'Youtube-test-clone'
-    package: '$(Build.ArtifactStagingDirectory)/build.zip'
+    package: '$(Build.ArtifactStagingDirectory)/build'
   displayName: 'Deploy to Azure Web App'
