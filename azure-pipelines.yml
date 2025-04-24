@@ -26,10 +26,16 @@ steps:
     replaceExistingArchive: true
   displayName: 'Archive Build Output'
 
+- task: ExtractFiles@1
+  inputs:
+    archiveFilePatterns: '**/*.zip'
+    destinationFolder: '$(Build.ArtifactStagingDirectory)/build.zip'
+    cleanDestinationFolder: true
+    overwriteExistingFiles: false'
 - task: AzureWebApp@1
   inputs:
     azureSubscription: 'MyAzureConnection'
     appType: 'webAppLinux'
     appName: 'Youtube-test-clone'
-    package: '$(Build.ArtifactStagingDirectory)/build.zip'
+    package: '$(Build.ArtifactStagingDirectory)/build'
   displayName: 'Deploy to Azure Web App'
