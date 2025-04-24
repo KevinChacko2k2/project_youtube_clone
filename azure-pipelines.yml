@@ -10,32 +10,26 @@ steps:
     npm -v
     npm install
     npm run build
-  displayName: 'Build React'
+  displayName: 'Install Node.js and Build React App'
 
 - script: |
-    mkdir -p $(Build.ArtifactStagingDirectory)
-    cp -r build/* $(Build.ArtifactStagingDirectory)/
-  displayName: 'Copy React Build to Artifact Staging Directory'
+    sudo apt update
+    sudo apt install zip -y
+  displayName: 'Install zip utility'
 
-- task: PublishBuildArtifacts@1
+- task: ArchiveFiles@2
   inputs:
-    PathtoPublish: '$(Build.ArtifactStagingDirectory)'
-    ArtifactName: 'website'
-    publishLocation: 'Container'
-  displayName: 'Publish Build Artifact'
-
-- task: DownloadBuildArtifacts@1
-  inputs:
-    buildType: 'current'
-    downloadType: 'single'
-    artifactName: 'website'
-    downloadPath: '$(System.ArtifactsDirectory)'
-  displayName: 'Download Artifact'
+    rootFolderOrFile: '$(System.DefaultWorkingDirectory)/build'
+    includeRootFolder: false
+    archiveType: 'zip'
+    archiveFile: '$(Build.ArtifactStagingDirectory)/build.zip'
+    replaceExistingArchive: true
+  displayName: 'Archive Build Output'
 
 - task: AzureWebApp@1
   inputs:
     azureSubscription: 'MyAzureConnection'
     appType: 'webAppLinux'
     appName: 'Youtube-test-clone'
-    package: '$(System.ArtifactsDirectory)/website'
+    package: '$(Build.ArtifactStagingDirectory)/build.zip'
   displayName: 'Deploy to Azure Web App'
