@@ -1,8 +1,8 @@
 trigger:
-- main  # or your default branch
+- main
 
 pool:
-  name: Kevin_pool  # your self-hosted agent pool name
+  name: Kevin_pool
 
 variables:
   imageName: ytclone
@@ -25,6 +25,5 @@ steps:
   displayName: 'Build Docker Image'
 
 - script: |
-    docker rm -f $(imageName)-container || true
-    docker run -d -p $(hostPort):$(containerPort) --name $(imageName)-container $(imageName)
+    docker run --rm -d -p $(hostPort):$(containerPort) --name $(imageName)-container $(imageName)
   displayName: 'Run Docker Container'
