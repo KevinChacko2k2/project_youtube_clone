@@ -1,0 +1,30 @@
+trigger:
+- main  # or your default branch
+
+pool:
+  name: Kevin_pool  # your self-hosted agent pool name
+
+variables:
+  imageName: ytclone
+  containerPort: 80
+  hostPort: 8080
+
+steps:
+- script: |
+    curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash -
+    sudo apt install nodejs -y
+  displayName: 'Install node'
+
+- script: |
+    npm install
+    npm run build
+  displayName: 'Build React App'
+
+- script: |
+    docker build -t $(imageName) .
+  displayName: 'Build Docker Image'
+
+- script: |
+    docker rm -f $(imageName)-container || true
+    docker run -d -p $(hostPort):$(containerPort) --name $(imageName)-container $(imageName)
+  displayName: 'Run Docker Container'
