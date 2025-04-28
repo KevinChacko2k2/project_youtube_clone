@@ -26,7 +26,7 @@ steps:
 
   - task: DockerInstaller@0
     inputs:
-      dockerVersion: '17.09.0-ce'
+      dockerVersion: '28.1.1'
 
   - script: |
       sudo systemctl start docker
