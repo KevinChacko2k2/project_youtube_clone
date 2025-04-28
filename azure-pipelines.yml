@@ -26,7 +26,16 @@ steps:
     
   - task: Docker@2
     inputs:
-      command: 'buildAndPush'
+      command: 'build'
+      repository: $(imageName)
       Dockerfile: '**/Dockerfile'
+      buildContext: .
+      tags: |
+        latest
+
+  - script: |
+      docker run --rm -d -p $(hostPort):$(containerPort) --name $(containername) $(imageName):latest
+    displayName: 'Run Docker Container'
+
 
 
