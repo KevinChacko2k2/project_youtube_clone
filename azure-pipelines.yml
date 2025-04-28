@@ -35,7 +35,7 @@ steps:
     inputs:
       command: run
       containerName: $(containername)
-      imageName: $(imageName):latest
+      image: $(imageName):latest
       ports: |
         $(hostPort):$(containerPort)
       detach: true
