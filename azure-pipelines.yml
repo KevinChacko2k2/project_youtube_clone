@@ -23,13 +23,6 @@ steps:
     inputs:
       command: 'custom'
       customCommand: 'run build'
-
-  - task: DockerInstaller@0
-    inputs:
-      dockerVersion: '28.1.1'
-
-  - script: |
-      sudo systemctl start docker
   - task: Docker@2
     inputs:
       command: build
