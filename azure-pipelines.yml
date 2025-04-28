@@ -1,6 +1,3 @@
-trigger:
-- main
-
 pool:
   name: Kevin_pool
 
@@ -8,22 +5,42 @@ variables:
   imageName: ytclone
   containerPort: 80
   hostPort: 8080
+  containername: $(imageName)-container
+  dockerfilePath: Dockerfile
 
 steps:
-- script: |
-    curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash -
-    sudo apt install nodejs -y
-  displayName: 'Install node'
+  - task: NodeTool@0
+    inputs:
+      versionSource: 'spec'
+      versionSpec: '20.x'
+    displayName: 'Install Node.js'
 
-- script: |
-    npm install
-    npm run build
-  displayName: 'Build React App'
+  - task: Npm@1
+    inputs:
+      command: 'install'
 
-- script: |
-    docker build -t $(imageName) .
-  displayName: 'Build Docker Image'
+  - task: Npm@1
+    inputs:
+      command: 'custom'
+      customCommand: 'run build'
 
-- script: |
-    docker run --rm -d -p $(hostPort):$(containerPort) --name $(imageName)-container $(imageName)
-  displayName: 'Run Docker Container'
+  - task: DockerInstaller@0
+    inputs:
+      dockerVersion: '17.09.0-ce'
+  - task: Docker@2
+    inputs:
+      command: build
+      repository: $(imageName)
+      Dockerfile: $(dockerfilePath)
+      buildContext: .
+      tags: latest
+
+  - task: Docker@2
+    inputs:
+      command: run
+      containerName: $(containername)
+      imageName: $(imageName):latest
+      ports: |
+        $(hostPort):$(containerPort)
+      detach: true
+      remove: true
