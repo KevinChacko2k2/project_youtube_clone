@@ -23,20 +23,10 @@ steps:
     inputs:
       command: 'custom'
       customCommand: 'run build'
+    
   - task: Docker@2
     inputs:
-      command: build
-      repository: $(imageName)
-      Dockerfile: $(dockerfilePath)
-      buildContext: .
-      tags: latest
+      command: 'buildAndPush'
+      Dockerfile: '**/Dockerfile'
 
-  - task: Docker@2
-    inputs:
-      command: run
-      containerName: $(containername)
-      image: $(imageName):latest
-      ports: |
-        $(hostPort):$(containerPort)
-      detach: true
-      remove: true
+
